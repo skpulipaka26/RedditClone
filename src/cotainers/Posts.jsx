@@ -10,6 +10,9 @@ import * as postsActions from '../actions/posts';
 import * as userActions from '../actions/users';
 
 import Post from '../components/Post';
+import Modal from '../components/Modal';
+import GMap from '../components/Map';
+import User from '../components/User';
 
 class Posts extends Component {
 
@@ -19,7 +22,8 @@ class Posts extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            postsAndUsers: []
+            postsAndUsers: [],
+            userDetails: null
         };
     }
 
@@ -53,22 +57,43 @@ class Posts extends Component {
     }
 
     render() {
+        let selectedUser;
+        let geo;
+        if (this.state.userDetails) {
+            const { address, ...user } = this.state.userDetails;
+            selectedUser = user;
+            geo = address.geo;
+        }
         return (
             <div className="container">
                 <div className="row mt-3">
                     {this.state.postsAndUsers.map(post => {
+                        const props = {
+                            ...post,
+                            history: this.props.history,
+                            selectedUser: (user) => this.setState({ userDetails: user })
+                        };
                         return (
                             <div key={post.id} className="col-12 my-1">
-                                <Post {...post} />
+                                <Post {...props} />
                             </div>
                         );
                     })}
                 </div>
+                {selectedUser && (
+                    <Modal
+                        title='User Details'
+                        onClose={() => this.setState({ userDetails: null })} >
+                        <User {...selectedUser} />
+                        <GMap {...geo} />
+                    </Modal>)}
             </div>
         );
     }
 
 }
+
+
 
 const mapStateToProps = (state) => {
     return state;

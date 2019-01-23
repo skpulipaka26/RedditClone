@@ -3,10 +3,10 @@
     color: inherit;
 }
 
-.card {
+.hover {
     transition: 0.2s;
 }
 
-.card:hover {
+.hover:hover {
     box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
 }

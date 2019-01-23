@@ -5,6 +5,9 @@ import { bindActionCreators } from 'redux';
 
 import * as commentsActions from '../actions/comments';
 
+import User from '../components/User';
+import GMap from '../components/Map';
+
 class Details extends Component {
 
     componentDidMount() {
@@ -21,15 +24,16 @@ class Details extends Component {
                     <div className="col-md-12 col-lg-8">
 
                         <div className="card my-2">
-                            <div className="card-header bg-primary">
-                                <button type="button" class="close" aria-label="Close"
+                            <div className="card-header text-white bg-dark">
+                                <button type="button" className="close" aria-label="Close"
                                     onClick={() => this.props.history.goBack()}
                                 >
-                                    <span aria-hidden="true">&times;</span>
+                                    <span aria-hidden="true" style={{ color: 'white' }}>&times;</span>
                                 </button>
+                                <h5 className="card-title m-0 p-0">{post.title.toUpperCase()}</h5>
                             </div>
                             <div className="card-body">
-                                <h5 className="card-title">{post.title.toUpperCase()}</h5>
+
                                 {post.body}
 
                                 <hr />
@@ -57,15 +61,12 @@ class Details extends Component {
 
                     <div className="col">
                         <div className="card my-2">
-                            <div className="card-header bg-info">
+                            <div className="card-header bg-dark">
                                 <h6 className="text-white p-0 m-0">Posted by</h6>
                             </div>
                             <div className="card-body">
-                                <p className="m-0">{post.user.username}</p>
-                                <p className="m-0">{post.user.name}</p>
-                                <p className="m-0">{post.user.email}</p>
-                                <p className="m-0"> {post.user.website} </p>
-                                <p className="m-0">{post.user.company.name}</p>
+                                <User {...post.user} />
+                                <GMap {...post.user.address.geo} />
                             </div>
                         </div>
                     </div>
