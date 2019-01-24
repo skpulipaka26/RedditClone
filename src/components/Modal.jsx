@@ -5,7 +5,9 @@ const Modal = ({ children, title, onClose }) => {
         <div className="modal fade show" role="dialog" tabIndex="-1" aria-modal='true'
             style={{
                 display: 'block',
-                background: 'hsla(0, 0%,0%,0.33)'
+                background: 'hsla(0, 0%,0%,0.33)',
+                overflowY: 'auto',
+                overflowX: 'hidden'
             }}
             onClick={onClose}>
             <div className="modal-dialog modal-dialog-centered" role="document"

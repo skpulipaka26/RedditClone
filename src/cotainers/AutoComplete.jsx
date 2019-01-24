@@ -4,9 +4,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { BehaviorSubject } from 'rxjs';
-import { distinctUntilChanged, debounceTime, map } from 'rxjs/operators';
+import { distinctUntilChanged, debounceTime, map, tap } from 'rxjs/operators';
 
 import * as userActions from '../actions/users';
+
+import Modal from '../components/Modal';
+import GMap from '../components/Map';
+import User from '../components/User';
 
 class AutoComplele extends Component {
 
@@ -16,13 +20,15 @@ class AutoComplele extends Component {
         super(props);
         this.state = {
             filteredList: [],
-            selectedResultIndex: 0
+            selectedResultIndex: 0,
+            searchValue: ''
         };
     }
 
     componentDidMount() {
         this.searchEvent$.pipe(
-            map(e => e && e.currentTarget ? e.currentTarget.value.trim() : ''),
+            tap(e => this.setState({ ...this.state, searchValue: e.target ? e.target.value : '' })),
+            map(e => e && e.target ? e.target.value.trim() : ''),
             distinctUntilChanged(),
             debounceTime(200)
         ).subscribe(searchString => {
@@ -77,17 +83,31 @@ class AutoComplele extends Component {
         const currIndex = this.state.selectedResultIndex;
         const selectedUser = this.state.filteredList[currIndex];
         this.props.setSelectedUser(selectedUser);
+        this.setState({
+            ...this.state,
+            filteredList: [],
+            searchValue: ''
+        });
     }
 
 
     render() {
+        let userDetails = null;
+        let geo;
+        if (this.props.users.selectedUser) {
+            const { address, ...user } = this.props.users.selectedUser;
+            userDetails = user;
+            geo = address.geo;
+        }
         return (
 
             <div className="container">
                 <div className="row w-100">
                     <div className="col-12">
                         <form className="form-inline d-flex justify-content-between">
-                            <input className="form-control" type="search" placeholder="Search Users" aria-label="Search"
+                            <input className="form-control"
+                                value={this.state.searchValue}
+                                type="search" placeholder="Search Users" aria-label="Search"
                                 style={{ flex: 1 }}
                                 onChange={this.onChange}
                                 onKeyDown={this.onKeyDown} />
@@ -101,7 +121,7 @@ class AutoComplele extends Component {
                                 backgroundColor: '#fff'
                             }}>
                                 {this.state.filteredList.map((listItem, index) => (
-                                    <li key={index} className="list-group-item"
+                                    <li key={index} className="list-group-item m-0"
                                         onClick={() => {
                                             this.setState({
                                                 ...this.state,
@@ -111,7 +131,7 @@ class AutoComplele extends Component {
                                         }}
                                         style={{
                                             cursor: 'pointer',
-                                            border: this.state.selectedResultIndex === index ? '3px solid green' : '1px solid rgba(0,0,0,.125)'
+                                            border: this.state.selectedResultIndex === index ? '1px solid rgba(0,0,0,.125)' : 'none'
                                         }}>
                                         {listItem.username}</li>
 
@@ -120,6 +140,14 @@ class AutoComplele extends Component {
                         )}
                     </div>
                 </div>
+
+                {userDetails && (
+                    <Modal
+                        title='User Details'
+                        onClose={() => this.props.setSelectedUser(null)} >
+                        <User {...userDetails} />
+                        <GMap {...geo} />
+                    </Modal>)}
             </div >
 
         );
