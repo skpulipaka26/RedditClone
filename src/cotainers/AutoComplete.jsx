@@ -28,7 +28,7 @@ class AutoComplele extends Component {
     componentDidMount() {
         this.searchEvent$.pipe(
             tap(e => this.setState({ ...this.state, searchValue: e.target ? e.target.value : '' })),
-            map(e => e && e.target ? e.target.value.trim() : ''),
+            map(e => e && e.target ? e.target.value.trim().toLowerCase() : ''),
             distinctUntilChanged(),
             debounceTime(200)
         ).subscribe(searchString => {
