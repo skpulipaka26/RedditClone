@@ -87,32 +87,37 @@ class AutoComplele extends Component {
                 <div className="row w-100">
                     <div className="col-12">
                         <form className="form-inline d-flex justify-content-between">
-                            <input className="form-control mr-2" type="search" placeholder="Search Users" aria-label="Search"
+                            <input className="form-control" type="search" placeholder="Search Users" aria-label="Search"
                                 style={{ flex: 1 }}
                                 onChange={this.onChange}
                                 onKeyDown={this.onKeyDown} />
-                            <button className="btn btn-success" type="button"
-                                onClick={this.onSelectSearchResult}
-                            >GO</button>
                         </form>
-                        <ul className="list-group" style={{ position: 'absolute' }}>
-                            {this.state.filteredList.map((listItem, index) => (
-                                <li key={index} className="list-group-item"
-                                    onClick={() => {
-                                        this.setState({
-                                            ...this.state,
-                                            selectedResultIndex: index
-                                        });
-                                        this.onSelectSearchResult();
-                                    }}
-                                    style={{
-                                        cursor: 'pointer',
-                                        border: this.state.selectedResultIndex === index ? '3px solid green' : '1px solid rgba(0,0,0,.125)'
-                                    }}>
-                                    {listItem.username}</li>
+                        {this.state.filteredList.length && (
+                            <ul className="list-group" style={{
+                                position: 'absolute',
+                                width: '100%',
+                                border: '3px solid rgba(0,0,0,.125)',
+                                borderTop: 'none',
+                                backgroundColor: '#fff'
+                            }}>
+                                {this.state.filteredList.map((listItem, index) => (
+                                    <li key={index} className="list-group-item"
+                                        onClick={() => {
+                                            this.setState({
+                                                ...this.state,
+                                                selectedResultIndex: index
+                                            });
+                                            this.onSelectSearchResult();
+                                        }}
+                                        style={{
+                                            cursor: 'pointer',
+                                            border: this.state.selectedResultIndex === index ? '3px solid green' : '1px solid rgba(0,0,0,.125)'
+                                        }}>
+                                        {listItem.username}</li>
 
-                            ))}
-                        </ul>
+                                ))}
+                            </ul>
+                        )}
                     </div>
                 </div>
             </div >
