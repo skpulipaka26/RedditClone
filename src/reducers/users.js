@@ -1,13 +1,14 @@
-import { SET_USERS, FETCHING_USERS } from '../actions/users';
+import { SET_USERS, FETCHING_USERS, SET_USER } from '../actions/users';
 
 const initialState = {
     list: [],
-    loading: false
+    loading: false,
+    selectedUser: null
 };
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case FETCHING_USERS: 
+        case FETCHING_USERS:
             return {
                 ...state,
                 loading: true
@@ -17,6 +18,11 @@ export default (state = initialState, action) => {
                 ...state,
                 list: [...action.payload],
                 loading: false
+            };
+        case SET_USER:
+            return {
+                ...state,
+                selectedUser: action.payload
             };
         default:
             return { ...state };

@@ -2,15 +2,17 @@ import React from 'react';
 
 import '../css/post.css'
 
-const Post = ({ history, selectedUser, ...props }) => {
+const Post = ({ history, selectedUser, searchedUser, ...props }) => {
     const post = {
         ...props,
         body: props.body.split('\n')[0] || ''
     };
-
     return (
         <div>
-            <div className="card hover" style={{ cursor: 'pointer' }}
+            <div className="card hover" style={{ 
+                cursor: 'pointer',
+                backgroundColor: searchedUser && searchedUser.id === post.user.id ? '#f8f9fa': '#fff'
+                 }}
                 onClick={() => {
                     history.push(`/posts/${post.id}`,
                         JSON.parse(JSON.stringify({ ...post }))

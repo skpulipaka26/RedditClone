@@ -2,6 +2,7 @@ import axios from 'axios';
 
 export const FETCHING_USERS = 'FETCHING_USERS';
 export const SET_USERS = 'SET_USERS';
+export const SET_USER = 'SET_USER';
 
 const BASE_URL = 'https://jsonplaceholder.typicode.com';
 
@@ -64,4 +65,13 @@ export const setUsers = (users) => {
             payload: users
         });
     };
+};
+
+export const setSelectedUser = (user) => {
+    return dispatch => {
+        return dispatch({
+            type: SET_USER,
+            payload: user
+        });
+    }
 };

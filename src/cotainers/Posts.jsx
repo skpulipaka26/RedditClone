@@ -22,8 +22,7 @@ class Posts extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            postsAndUsers: [],
-            userDetails: null
+            postsAndUsers: []
         };
     }
 
@@ -50,6 +49,7 @@ class Posts extends Component {
                     };
                 });
                 this.setState({
+                    ...this.state,
                     postsAndUsers: [...reqArr]
                 });
             }
@@ -57,11 +57,11 @@ class Posts extends Component {
     }
 
     render() {
-        let selectedUser;
+        let userDetails = null;
         let geo;
-        if (this.state.userDetails) {
-            const { address, ...user } = this.state.userDetails;
-            selectedUser = user;
+        if (this.props.users.selectedUser) {
+            const { address, ...user } = this.props.users.selectedUser;
+            userDetails = user;
             geo = address.geo;
         }
         return (
@@ -70,8 +70,9 @@ class Posts extends Component {
                     {this.state.postsAndUsers.map(post => {
                         const props = {
                             ...post,
+                            searchedUser: userDetails,
                             history: this.props.history,
-                            selectedUser: (user) => this.setState({ userDetails: user })
+                            selectedUser: (user) => this.props.setSelectedUser(user)
                         };
                         return (
                             <div key={post.id} className="col-12 my-1">
@@ -80,11 +81,11 @@ class Posts extends Component {
                         );
                     })}
                 </div>
-                {selectedUser && (
+                {userDetails && (
                     <Modal
                         title='User Details'
-                        onClose={() => this.setState({ userDetails: null })} >
-                        <User {...selectedUser} />
+                        onClose={() => this.props.setSelectedUser(null)} >
+                        <User {...userDetails} />
                         <GMap {...geo} />
                     </Modal>)}
             </div>
