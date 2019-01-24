@@ -92,7 +92,7 @@ class AutoComplele extends Component {
                                 onChange={this.onChange}
                                 onKeyDown={this.onKeyDown} />
                         </form>
-                        {this.state.filteredList.length && (
+                        {this.state.filteredList.length > 0 && (
                             <ul className="list-group" style={{
                                 position: 'absolute',
                                 width: '100%',
