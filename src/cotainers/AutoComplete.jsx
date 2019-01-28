@@ -34,8 +34,7 @@ class AutoComplele extends Component {
         ).subscribe(searchString => {
             const users = this.props.users.list || [];
             const filteredList = users.filter(user => searchString !== '' &&
-                (user.username.trim().toLowerCase().includes(searchString) || user.name.trim().toLowerCase().includes(searchString) ||
-                    user.email.trim().toLowerCase().includes(searchString) || user.website.trim().toLowerCase().includes(searchString)));
+                Object.keys(user).some(key => typeof user[key] === 'string' && user[key].trim().toLowerCase().includes(searchString)));
             this.setState({
                 ...this.state,
                 filteredList: filteredList,
